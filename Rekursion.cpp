@@ -10,6 +10,16 @@ void Zahl(int zahl){
 		printf("Aufstieg: %i \n", myZahl);
   }
 
+int Fakultaet(int zahl){
+  if(zahl <= 1 ){
+    return 1;
+  }else{
+    return zahl * Fakultaet(zahl-1);
+  }
+}
+
   int main(){
     Zahl(0);
+
+    printf(" %i\n", Fakultaet(5));
   }

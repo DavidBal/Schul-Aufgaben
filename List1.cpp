@@ -8,6 +8,9 @@
  * Aufgabe 3b - Ausgabe rückwaerts(procedure, iterativ; lokaler Startpointer, ganze Liste)
  * Aufgabe 4a - Ausgabe vorwaerts(procedure, rekusiv, ganze Liste);
  * Aufgabe 4b - Ausgabe rückwaerts(procedure, rekusiv, ganze Liste);
+ * Aufgabe 6a - Pointer ** Eingabe(procedure, iterativ); TODO Unterprogramm frei(procedure, iterativ)
+ * Aufgabe 6b - Refrence *& Eingabe(procedure, iterativ); TODO Unterprogramm frei(procedure, iterativ)
+ * TODO Aufgabe 5, 7
 **/
 
 #include <iostream>
@@ -26,6 +29,9 @@ int  GetListAverageValue(struct ListElement* first);
 struct ListElement* FillListWithNumbers(struct ListElement* first,int count);
 void ShowListValueRekursiv(struct ListElement* item, bool forward, int position=0);
 void ShowAllValuesBiggerThenValue(struct ListElement* first, int value);
+void AddElementToListRefernce(struct ListElement*& first, int value);
+void AddElementToListPointer(struct ListElement** first, int value);
+void ClearListRefrence(struct ListElement*& first);
 
 int main()
 {
@@ -45,7 +51,10 @@ int main()
     std::cout << "6 - Liste ausgeben Vorwärts Rekursiv (Aufgabe 4 a)" << endl;
     std::cout << "7 - Liste ausgeben Rückwärts Rekursiv (Aufgabe 4 b)" << endl;
 
-    std::cout << "8 - Liste leeren" << endl;
+    std::cout << "8 - Element hinzufügen Pointer (Aufgabe 6 a)" << '\n';
+    std::cout << "9 - Element hinzufügen Refrence (Aufgabe 6 b)" << '\n';
+
+    std::cout << "10 - Liste leeren" << endl;
     std::cout << "0 - Beenden (Die Liste wird freigeben)" << endl;
     cin >> menue;
     int value = 0;
@@ -84,8 +93,18 @@ int main()
           break;
 
       case 8:
-          ClearList(&first);
+          printf("Bitte einen Wert eingeben: ");
+          cin >> value;
+          AddElementToListPointer(&first, value);
           break;
+      case 9:
+        printf("Bitte einen Wert eingeben: ");
+        cin >> value;
+        AddElementToListRefernce(first, value);
+        break;
+      case 10:
+        ClearList(&first);
+        break;
       default:
         menue = 10000;
         break;
@@ -194,6 +213,18 @@ void ClearList(struct ListElement** first)
   tmp = NULL;
 }
 
+void ClearListRefrence(struct ListElement*& first)
+{
+  struct ListElement* tmp= first;
+  while(tmp != NULL){
+    first = tmp->next;
+    free(tmp);
+    tmp = first;
+  }
+  tmp = NULL;
+}
+
+
 struct ListElement* FillListWithNumbers(struct ListElement* first,int count)
 {
   for(int i = 1; i <= count; i++)
@@ -217,4 +248,34 @@ void ShowListValueRekursiv(struct ListElement* item, bool forward, int position)
       printf("Pos:%i | Value:%i\n", position, item->value);
     }
   }
+}
+
+void AddElementToListPointer(struct ListElement** first, int value){
+  //1. Create a new Element
+  struct ListElement* tmp = NULL;
+  tmp = (struct ListElement*) malloc (sizeof(struct ListElement));
+
+  if(tmp != NULL){
+    tmp->value = value;
+    //3. set next
+    tmp->next = *first;
+    //4. set first pointer to new item
+    *first = tmp;
+  }
+  tmp = NULL;
+}
+
+void AddElementToListRefernce(struct ListElement*& first, int value){
+  //1. Create a new Element
+  struct ListElement* tmp = NULL;
+  tmp = (struct ListElement*) malloc (sizeof(struct ListElement));
+
+  if(tmp != NULL){
+    tmp->value = value;
+    //3. set next
+    tmp->next = first;
+    //4. set first pointer to new item
+    first = tmp;
+  }
+  tmp = NULL;
 }

@@ -37,10 +37,10 @@ public:
     this->last = NULL;
   }
 
-  Add(T newElement){
+  void Add(T newElement){
     if (this->last == NULL && this->first == NULL)
     {
-      new Element<>()
+      new Element<>();
     }else if(this->last == NULL || this->next == NULL){
 
     }
