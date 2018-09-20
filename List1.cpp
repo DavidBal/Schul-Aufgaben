@@ -8,8 +8,10 @@
  * Aufgabe 3b - Ausgabe rückwaerts(procedure, iterativ; lokaler Startpointer, ganze Liste)
  * Aufgabe 4a - Ausgabe vorwaerts(procedure, rekusiv, ganze Liste);
  * Aufgabe 4b - Ausgabe rückwaerts(procedure, rekusiv, ganze Liste);
- * Aufgabe 6a - Pointer ** Eingabe(procedure, iterativ); TODO Unterprogramm frei(procedure, iterativ)
- * Aufgabe 6b - Refrence *& Eingabe(procedure, iterativ); TODO Unterprogramm frei(procedure, iterativ)
+ * Aufgabe 6a - Pointer ** Eingabe(procedure, iterativ);  Unterprogramm frei(procedure, iterativ)
+ * Aufgabe 6b - Refrence *& Eingabe(procedure, iterativ);  Unterprogramm frei(procedure, iterativ)
+ * Aufgabe 7a - Unterprogramm AusgabeListe mit Adressen (procedure, rekusiv)
+ * Aufgabe 7b - Unterprogramm frei(procedure, rekursiv);
  * TODO Aufgabe 5, 7
 **/
 
@@ -32,6 +34,7 @@ void ShowAllValuesBiggerThenValue(struct ListElement* first, int value);
 void AddElementToListRefernce(struct ListElement*& first, int value);
 void AddElementToListPointer(struct ListElement** first, int value);
 void ClearListRefrence(struct ListElement*& first);
+void FreeListRekursiv(struct ListElement** pointer );
 
 int main()
 {
@@ -39,7 +42,7 @@ int main()
   int menue = 0;
   do{
     std::cout << "Welche Funktion wollen Sie ausführen?" << endl;
-    std::cout << "1 - item hinzufügen" << endl;
+    std::cout << "1 - item hinzufügen (5 a)" << endl;
     std::cout << "2 - Füge 10 Elemente in die Liste" << endl;
 
     std::cout << "3 - Durchschnitt (Aufgabe 1)" << endl;
@@ -48,13 +51,14 @@ int main()
     std::cout << "4 - Liste ausgeben Vorwärts Iterativ (Aufgabe 3 a)" << endl;
     std::cout << "5 - Liste ausgeben Rückwärts Iterativ (Aufgabe 3 b)" << endl;
 
-    std::cout << "6 - Liste ausgeben Vorwärts Rekursiv (Aufgabe 4 a)" << endl;
+    std::cout << "6 - Liste ausgeben Vorwärts Rekursiv (Aufgabe 4 a, 7 a)" << endl;
     std::cout << "7 - Liste ausgeben Rückwärts Rekursiv (Aufgabe 4 b)" << endl;
 
     std::cout << "8 - Element hinzufügen Pointer (Aufgabe 6 a)" << '\n';
     std::cout << "9 - Element hinzufügen Refrence (Aufgabe 6 b)" << '\n';
 
-    std::cout << "10 - Liste leeren" << endl;
+    std::cout << "10 - Liste leeren (5 b)" << endl;
+    std::cout << "11 - Liste leeren Recursiv (7 b)" << '\n';
     std::cout << "0 - Beenden (Die Liste wird freigeben)" << endl;
     cin >> menue;
     int value = 0;
@@ -104,6 +108,9 @@ int main()
         break;
       case 10:
         ClearList(&first);
+        break;
+      case 11:
+        FreeListRekursiv(&first);
         break;
       default:
         menue = 10000;
@@ -240,7 +247,7 @@ void ShowListValueRekursiv(struct ListElement* item, bool forward, int position)
   {
     if(forward)
     {
-      printf("Pos:%i | Value:%i\n", position, item->value);
+      printf("Pos:%i | Adress:%p | Value:%i\n", position, item, item->value);
     }
     ShowListValueRekursiv(item->next, forward, position+1);
     if(!forward)
@@ -278,4 +285,14 @@ void AddElementToListRefernce(struct ListElement*& first, int value){
     first = tmp;
   }
   tmp = NULL;
+}
+//first->()->()->NULL
+void FreeListRekursiv(struct ListElement** pointer )
+{
+  if(*pointer != NULL)
+  {
+    FreeListRekursiv(&((*pointer)->next));
+    free(*pointer);
+    *pointer = NULL;
+  }
 }
